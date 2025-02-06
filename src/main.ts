@@ -2,7 +2,7 @@ import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './all-exceptions.filter';
 import https from 'https';
-import cron from 'node-cron';
+import * as cron from 'node-cron'; // Changed from default import to namespace import
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
