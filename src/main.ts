@@ -28,7 +28,7 @@ function keepAlive(url: string): void {
 }
 
 // Replace with your actual Render URL
-const urlToPing = process.env.DEPLOYED_URL || '';
+const urlToPing = process.env.DEPLOYED_URL + '/api/users';
 
 // Schedule a ping every 5 minutes using cron
 cron.schedule('*/5 * * * *', () => {
