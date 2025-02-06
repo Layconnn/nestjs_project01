@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
@@ -12,14 +12,20 @@ export class UsersService {
     { id: 4, name: 'Smith', email: 'smith@mail.com', role: 'intern' },
   ];
 
-  findAll(role?: 'intern' | 'engineer' | 'admin') {
-    if (role) {
-      const rolesArray = this.users.filter((user) => user.role === role);
-      if (rolesArray.length === 0)
-        throw new NotFoundException('User Role Not Found');
-    } else if (!role) {
-      throw new NotFoundException('User Role empty');
+  findAll(role?: 'intern' | 'engineer' | 'admin' | '') {
+    // If the role parameter is provided as an empty string, throw an error.
+    if (role === '') {
+      throw new BadRequestException('Role parameter cannot be empty');
     }
+    // If role is provided (and not an empty string), filter by role.
+    if (role !== undefined) {
+      const rolesArray = this.users.filter((user) => user.role === role);
+      if (rolesArray.length === 0) {
+        throw new NotFoundException('User Role Not Found');
+      }
+      return rolesArray;
+    }
+    // If no role parameter was provided at all, return all users.
     return this.users;
   }
 
